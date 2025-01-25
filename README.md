@@ -1,5 +1,7 @@
 # snatcher 🚀
 
+> *I originally coded this tool after a frustrating incident where I lost my production code and realized I had sourcemaps still live. Instead of rewriting everything, I wanted an automated way to “snatch” my own code back from those `.map` files. Now you can, too!*
+
 A CLI tool to **snatch** the **main** sourcemap from your production React (or similar Webpack-based) app and reconstruct your **actual** code. No more rummaging through node\_modules or weird bundler files — just the good stuff (like your `src/App.js`)!
 
 When `snatcher` runs, it:
@@ -48,35 +50,36 @@ This installs the CLI command `snatcher` globally so you can run it anywhere.\
 
 ## Usage
 
+Run `snatcher` by providing the **public URL** of your site, followed by any options:
+
 ```bash
 snatcher <baseUrl> [options]
 ```
 
-where:
+### Required Argument
+- **`<baseUrl>`**  
+  The top-level URL where your React/CRA app is hosted. Examples:
+    - `https://myusername.github.io/my-react-app/`
+    - `https://example.com/subfolder/`
 
-- The **public URL** of your site. For instance, `https://myusername.github.io/my-react-app/` or `https://example.com/subfolder/`.
-- `` (default: `recovered-files`): The folder where snatched files go.
-- Prints out extra logs about what it’s doing.
+### Options
+- **`-o, --output <dir>`** (default: `recovered-files`)  
+  The folder in which to place the reconstructed files and the JSON report.
+- **`-d, --debug`**  
+  Prints extra logs for troubleshooting or curiosity.
 
----
-
-## Example
-
-Suppose your site is at `https://myusername.github.io/my-react-app/`. Run:
-
+### Quick Example
 ```bash
-snatcher https://myusername.github.io/my-react-app/ -o recovered-code
+snatcher https://myusername.github.io/my-react-app/ -o recovered-code -d
 ```
+This will:
+1. Fetch the page at `https://myusername.github.io/my-react-app/`
+2. Locate the first `<script>` whose `src` contains `"main"`
+3. Snatch its `.map` file (if found)
+4. Rebuild only the source files that matter (skipping `node_modules/` or `webpack/` paths)
+5. Place everything in `recovered-code/` along with a `snatch-report.json`
 
-**What happens**:
-
-1. `snatcher` fetches your main page’s HTML.
-2. Finds the first `<script>` whose `src` includes `"main"`.
-3. Looks for `//# sourceMappingURL=main.abc123.js.map`.
-4. Downloads & parses that `.map`.
-5. Writes every relevant file under `recovered-code/`, except those containing `node_modules/` or `webpack/` in their path.
-6. Creates `recovered-code/snatch-report.json` with stats & possible package names.
-
+Use `--debug` if you want to see each step and URL request.
 ---
 
 ## JSON Report
