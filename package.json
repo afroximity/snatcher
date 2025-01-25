@@ -1,5 +1,5 @@
 {
-  "name": "snatcher",
+  "name": "snatcher-cli",
   "version": "1.0.0",
   "description": "A CLI tool to automatically locate and recover code and assets from production sourcemaps",
   "main": "snatcher.js",
@@ -10,7 +10,13 @@
     "type": "git",
     "url": "git+https://github.com/afroximity/snatcher.git"
   },
-  "keywords": ["sourcemaps", "code-recovery", "assets", "webpack", "react"],
+  "keywords": [
+    "sourcemaps",
+    "code-recovery",
+    "assets",
+    "webpack",
+    "react"
+  ],
   "author": "afroximity",
   "license": "MIT",
   "dependencies": {

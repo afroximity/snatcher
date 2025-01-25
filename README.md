@@ -1,10 +1,10 @@
-# snatcher 🚀
+# snatcher-cli 🚀
 
 > *I originally coded this tool after a frustrating incident where I lost my production code and realized I had sourcemaps still live. Instead of rewriting everything, I wanted an automated way to “snatch” my own code back from those `.map` files. Now you can, too!*
 
 A CLI tool to **snatch** the **main** sourcemap from your production React (or similar Webpack-based) app and reconstruct your **actual** code. No more rummaging through node\_modules or weird bundler files — just the good stuff (like your `src/App.js`)!
 
-When `snatcher` runs, it:
+When `snatcher-cli` runs, it:
 
 1. Fetches the **main HTML** from your site.
 2. Locates the **first script** whose path includes `"main"`.
@@ -30,7 +30,7 @@ When `snatcher` runs, it:
 
 ## Features
 
-- **Automagic Discovery**: No need to guess your hashed filenames. `snatcher` sees whatever the HTML references for your “main” script.
+- **Automagic Discovery**: No need to guess your hashed filenames. `snatcher-cli` sees whatever the HTML references for your “main” script.
 - **Selective Recovery**: It **omits** all the `node_modules` or `webpack`-related stuff in the sourcemap, focusing on your own code.
 - **Image Stub Replacement**: Spots lines like `__webpack_public_path__ + "static/media/Logo.123abc.png"` and fetches the **real** image file for you.
 - **JSON Reporting**: You get a `snatch-report.json` summarizing the job, listing packages that might be in your `node_modules`, etc.
@@ -40,20 +40,20 @@ When `snatcher` runs, it:
 ## Installation
 
 ```bash
-npm install -g snatcher
+npm install -g snatcher-cli
 ```
 
-This installs the CLI command `snatcher` globally so you can run it anywhere.\
+This installs the CLI command `snatcher-cli` globally so you can run it anywhere.\
 *(Or use **`npx`** if you prefer not to install globally.)*
 
 ---
 
 ## Usage
 
-Run `snatcher` by providing the **public URL** of your site, followed by any options:
+Run `snatcher-cli` by providing the **public URL** of your site, followed by any options:
 
 ```bash
-snatcher <baseUrl> [options]
+snatcher-cli <baseUrl> [options]
 ```
 
 ### Required Argument
@@ -70,7 +70,7 @@ snatcher <baseUrl> [options]
 
 ### Quick Example
 ```bash
-snatcher https://myusername.github.io/my-react-app/ -o recovered-code -d
+snatcher-cli https://myusername.github.io/my-react-app/ -o recovered-code -d
 ```
 This will:
 1. Fetch the page at `https://myusername.github.io/my-react-app/`
@@ -112,7 +112,7 @@ It might look something like:
 
 ## Skipping Node Modules
 
-By default, `snatcher` checks if a file path includes `node_modules/` or `webpack/`. If so, it **skips** writing that file to your local system. Instead, it just **logs** the package name in the report.
+By default, `snatcher-cli` checks if a file path includes `node_modules/` or `webpack/`. If so, it **skips** writing that file to your local system. Instead, it just **logs** the package name in the report.
 
 Why? Because you probably don’t need the entire `node_modules` tree — just your own actual code. This also helps avoid pulling in thousands of files.
 
@@ -121,7 +121,7 @@ Why? Because you probably don’t need the entire `node_modules` tree — just y
 ## Limitations & Warnings
 
 1. **“Main” Only**: We only look for the first script containing `main`. If your app splits into multiple chunks or code-splits everything, those might not be recovered.
-2. **Must Actually Deploy **``: If your production build is configured to disable or remove `.map` files, `snatcher` can’t snatch anything.
+2. **Must Actually Deploy **``: If your production build is configured to disable or remove `.map` files, `snatcher-cli` can’t snatch anything.
 3. **Embedded **`` Required: We rely on the `.map` having real code in `sourcesContent`. If it’s referencing external files that aren’t included, you’ll get partial or no code.
 4. **Use on Your Own Code**: This is meant for **your** code or code you have explicit rights to. Respect others’ IP.
 5. **Naive Filter**: If you need stricter or different filtering (e.g., only `src/` files, or ignoring tests), adapt it in the script.
